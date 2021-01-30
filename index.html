@@ -11,6 +11,7 @@
         rel="stylesheet">
     <!-- Stylesheet -->
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style/all.min.css">
 </head>
 
 <body>
@@ -27,11 +28,13 @@
     </header>
 
     <!--Booking Section-->
-    <main class="main-content container">
+    <main id="main-area" class="main-content container">
 
         <div class="booking-content">
             <h1>Cruise Queen</h1>
-            <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</p>
+            <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the
+                industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and
+                scrambled it to make a type specimen book.</p>
         </div>
 
 
@@ -39,7 +42,7 @@
             <h3>Book Ocean Time</h3>
             <div class="input-group">
                 <label for="">Flying From</label>
-                <input class="inp-style" type="text" name="" placeholder="Dhake, Bangladesh">
+                <input class="inp-style" type="text" name="" placeholder="Dhaka, Bangladesh">
             </div>
             <div class="input-group">
                 <label for="">Flying To</label>
@@ -48,7 +51,7 @@
             <div class="inputs">
                 <div class="input-group">
                     <label" for="">Departure</label>
-                    <input class="inp-style" type="date" name="">
+                        <input class="inp-style" type="date" name="">
                 </div>
                 <div class="input-group">
                     <label for="">Return</label>
@@ -58,20 +61,22 @@
             <div class="input-group f-class">
                 <div>
                     <label for="">First Class ($150)</label>
-                    <input class="inp-style inp-width" type="number" name="">
+                    <input id="1stClass-input" class="inp-style inp-width" type="number" name="" value="0">
                 </div>
                 <div class="plus-minus-btn">
-                    <p>+ -</p>
+                    <button onclick="handleTicketCount('1stClass', false)"><i class="fas fa-minus"></i></button>
+                    <button onclick="handleTicketCount('1stClass', true)"><i class="fas fa-plus"></i></button>
                 </div>
             </div>
-            
+
             <div class="input-group f-class">
                 <div>
                     <label for="">Economy ($100)</label>
-                    <input class="inp-style inp-width" type="number" name="">
+                    <input id="economy-input" class="inp-style inp-width" type="number" name="" value="0">
                 </div>
                 <div class="plus-minus-btn">
-                    <p> <span>+</span> <span>-</span> </p>
+                    <button onclick="handleTicketCount('economy', false)"><i class="fas fa-minus"></i></button>
+                    <button onclick="handleTicketCount('economy', true)"><i class="fas fa-plus"></i></button>
                 </div>
             </div>
             <div class="calculations">
@@ -80,7 +85,7 @@
                         <p>Subtotal</p>
                     </div>
                     <div class="right">
-                        <p>$500</p>
+                        <p id="sub-total">$000</p>
                     </div>
                 </div>
 
@@ -89,7 +94,7 @@
                         <p>Charge 10% VAT</p>
                     </div>
                     <div class="right">
-                        <p>$50</p>
+                        <p id="tax">$00</p>
                     </div>
                 </div>
                 <hr>
@@ -98,15 +103,64 @@
                         <h4>Total</h4>
                     </div>
                     <div class="right">
-                        <p>$550</p>
+                        <p id="grand-total">$000</p>
                     </div>
                 </div>
             </div>
-            <button class="btn-style">Book Now</button>
+            <button id="book-now" class="btn-style">Book Now</button>
         </div>
     </main>
+    <div id="book-confirm" class="confirm-area container">
+        <div class="confirm-msg">
+            <h1>Thank You</h1>
+            <h4>Your tickets have been booked successfully </h4>
+        </div>
+    </div>
 
-    <!--Thank You-->
+    <script>
+
+        /* Confirmation massage after booking */
+        document.getElementById('book-now').addEventListener('click', function () {
+            const afterSubmit = document.getElementById('main-area');
+            afterSubmit.style.display = 'none';
+            document.getElementById('book-confirm').style.display = 'block';
+        })
+
+        /* Ticket count Function */
+        function handleTicketCount(id, isIncrease) {
+            const seatInputNumber = getInputValue(id);
+            let newSeatInput = seatInputNumber;
+            if (isIncrease == true) {
+                newSeatInput = seatInputNumber + 1;
+            }
+            if (isIncrease == false && seatInputNumber > 0) {
+                newSeatInput = seatInputNumber - 1;
+            }
+            document.getElementById(id + '-input').value = newSeatInput;
+            calculateTotal();
+        }
+
+        /* Total calculation function */
+        function calculateTotal() {
+            const fClassCount = getInputValue('1stClass');
+            const economyCount = getInputValue('economy');
+            let subTotal = fClassCount * 150 + economyCount * 100;
+            document.getElementById('sub-total').innerText = '$' + subTotal;
+            // Tax calculation
+            const tax = subTotal * 0.1;
+            document.getElementById('tax').innerText = '$' + tax;
+            // Grand total calculation
+            const grandTotal = subTotal + tax;
+            document.getElementById('grand-total').innerText = '$' + grandTotal;
+        }
+
+        /* Input value function */
+        function getInputValue(id) {
+            const ticketInput = document.getElementById(id + '-input').value;
+            const ticketCount = parseInt(ticketInput);
+            return ticketCount;
+        }
+    </script>
 </body>
 
 </html>
